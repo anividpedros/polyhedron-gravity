@@ -1,3 +1,15 @@
+# Data folder
+GravityMapping/
+
+# Executables
+CreateGravFile
+PolyGrav
+PolyGravCUDA
+MapGravityMPI
+
+# Files
+GravityFile.txt
+
 # Prerequisites
 *.d
 
