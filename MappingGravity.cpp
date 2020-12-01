@@ -73,24 +73,26 @@ int main(int argc, char** argv)
 		pos[0] = XscS[ii*3];
 		pos[1] = XscS[ii*3+1];
 		pos[2] = XscS[ii*3+2];
-
 		grav_output = PolyGrav(pos,polygon);
+
+		disp(grav_output);
 		
 		// Acceleration
-		MapGravS[ii*3]   = grav_output[0];
-		MapGravS[ii*3+1] = grav_output[1];
-		MapGravS[ii*3+2] = grav_output[2];
+		MapGravS[ii*12]   = grav_output[0];
+		MapGravS[ii*12+1] = grav_output[1];
+		MapGravS[ii*12+2] = grav_output[2];
 
 		// Gradient
-		MapGravS[ii*3+3]   = grav_output[3];
-		MapGravS[ii*3+4] = grav_output[4];
-		MapGravS[ii*3+5] = grav_output[5];
-		MapGravS[ii*3+6]   = grav_output[6];
-		MapGravS[ii*3+7] = grav_output[7];
-		MapGravS[ii*3+8] = grav_output[8];
-		MapGravS[ii*3+9]   = grav_output[9];
-		MapGravS[ii*3+10] = grav_output[10];
-		MapGravS[ii*3+11] = grav_output[11];
+		MapGravS[ii*12+3]   = grav_output[3];
+		MapGravS[ii*12+4] = grav_output[4];
+		MapGravS[ii*12+5] = grav_output[5];
+		MapGravS[ii*12+6]   = grav_output[6];
+		MapGravS[ii*12+7] = grav_output[7];
+		MapGravS[ii*12+8] = grav_output[8];
+		MapGravS[ii*12+9]   = grav_output[9];
+		MapGravS[ii*12+10] = grav_output[10];
+		MapGravS[ii*12+11] = grav_output[11];
+
 	}
 	
 	MPI_Gather(MapGravS, 12*elperproc, MPI_DOUBLE, MapGrav, 12*elperproc, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -104,7 +106,7 @@ int main(int argc, char** argv)
 		assert(GravityFile.is_open());
 		for (size_t i = 0; i < nPoints; i++)
 		{
-			GravityFile<<MapGrav[i*3]<<'\t'<<MapGrav[i*3+1]<<'\t'<<MapGrav[i*3+2]<<'\n';	
+			GravityFile<<MapGrav[i*12]<<'\t'<<MapGrav[i*12+1]<<'\t'<<MapGrav[i*12+2]<<'\n';	
 		}
 		GravityFile.close();
 
@@ -114,7 +116,8 @@ int main(int argc, char** argv)
 		{
 			for (size_t i = 0; i < 3; i++)
 			{
-				GravityGradientFile<<MapGrav[3+3*i+12*k]<<'\t'<<MapGrav[3+3*i+1+12*k]<<'\t'<<MapGrav[3+3*i+2+12*k]<<'\n';	
+				std::cout<<3+3*i+12*k<<std::endl;
+				GravityGradientFile<<MapGrav[3+3*i+12*k]<<'\t'<<MapGrav[4+3*i+12*k]<<'\t'<<MapGrav[5+3*i+12*k]<<'\n';	
 			}
 		
 		}
