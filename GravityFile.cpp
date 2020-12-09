@@ -22,7 +22,7 @@ void Polygon::CreateGravFile(std::string filename, double density)
   mNOF = faces.size();
 
   // Verify Polyhedron property
-  assert(mNOF = 2*mNOV - 4);
+  assert(mNOF == 2*mNOV - 4);
 
   mNOE = 3*(mNOV - 2);
 
@@ -147,7 +147,7 @@ void Polygon::CreateGravFile(std::string filename, double density)
 
     }
 
-  assert (numEdges = mNOE);
+  assert (numEdges == mNOE);
 
 // Edge direction
 // Set positive or negative orientation for the edge facets
@@ -358,8 +358,8 @@ void Polygon::ReadPolygon(std::string filename)
 int main()
 {  
 
-    std::string filename = "GravityMapping/BennuRadar.obj";
-    double density = 1.19e12; //kg/km3
+    std::string filename = "GravityMapping/Bennu50kfixed.obj";
+    double density = 1.26e12; //kg/km3
 
     // Polygon polygon(filename, density);
     Polygon p;

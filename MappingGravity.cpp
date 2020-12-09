@@ -74,8 +74,6 @@ int main(int argc, char** argv)
 		pos[1] = XscS[ii*3+1];
 		pos[2] = XscS[ii*3+2];
 		grav_output = PolyGrav(pos,polygon);
-
-		disp(grav_output);
 		
 		// Acceleration
 		MapGravS[ii*12]   = grav_output[0];
@@ -116,7 +114,6 @@ int main(int argc, char** argv)
 		{
 			for (size_t i = 0; i < 3; i++)
 			{
-				std::cout<<3+3*i+12*k<<std::endl;
 				GravityGradientFile<<MapGrav[3+3*i+12*k]<<'\t'<<MapGrav[4+3*i+12*k]<<'\t'<<MapGrav[5+3*i+12*k]<<'\n';	
 			}
 		
