@@ -17,9 +17,9 @@ int main()
     Polygon polygon(GravityFile);
     
     Vect Xsc(3);
-    Xsc [0] = 10;
-    Xsc [1] = 10;
-    Xsc [2] = 10;    
+    Xsc [0] = 200;
+    Xsc [1] = 0;
+    Xsc [2] = 0;    
 
     Vect gravity(12);
     gravity = PolyGrav(Xsc, polygon);

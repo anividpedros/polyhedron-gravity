@@ -81,13 +81,13 @@ int main(int argc, char** argv)
 		MapGravS[ii*12+2] = grav_output[2];
 
 		// Gradient
-		MapGravS[ii*12+3]   = grav_output[3];
-		MapGravS[ii*12+4] = grav_output[4];
-		MapGravS[ii*12+5] = grav_output[5];
-		MapGravS[ii*12+6]   = grav_output[6];
-		MapGravS[ii*12+7] = grav_output[7];
-		MapGravS[ii*12+8] = grav_output[8];
-		MapGravS[ii*12+9]   = grav_output[9];
+		MapGravS[ii*12+3]  = grav_output[3];
+		MapGravS[ii*12+4]  = grav_output[4];
+		MapGravS[ii*12+5]  = grav_output[5];
+		MapGravS[ii*12+6]  = grav_output[6];
+		MapGravS[ii*12+7]  = grav_output[7];
+		MapGravS[ii*12+8]  = grav_output[8];
+		MapGravS[ii*12+9]  = grav_output[9];
 		MapGravS[ii*12+10] = grav_output[10];
 		MapGravS[ii*12+11] = grav_output[11];
 

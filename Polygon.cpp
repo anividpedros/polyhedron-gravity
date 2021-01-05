@@ -30,8 +30,8 @@ Polygon::Polygon(std::ifstream& GravityFile)
   mNOF = NOF;
   mNOE = NOE;
 
-  assert(mNOF = 2*mNOV - 4);
-  assert(mNOE = 3*(mNOV - 2));
+  assert(mNOF == 2*mNOV - 4);
+  assert(mNOE == 3*(mNOV - 2));
 
   mX = new double [mNOV];
   mY = new double [mNOV];
@@ -366,14 +366,13 @@ Vect PolyGrav(Vect& Xsc, Polygon& Body)
       // Gravitational Acceleration
       a_grav = a_grav - E*r1*Le;
       g_grav = g_grav + E*Le;
-    }
-
   
-  g_grav = Body.mGs * g_grav;
+    }
+  g_grav = Body.mGs*g_grav;
   a_grav = Body.mGs*a_grav;
 
   Vect Output(12);
-
+  disp(a_grav);
   for (int i = 0; i < 3; i++)
   {
     Output[i] = a_grav[i];

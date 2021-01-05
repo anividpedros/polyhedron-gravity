@@ -69,10 +69,11 @@ void Polygon::CreateGravFile(std::string filename, double density)
     mListTri[i][1] = b;
     mListTri[i][2] = c;
 
+
     // Vertex2 - Vertex1
-    double d1[3] = {vertices[b].x-vertices[a].x,vertices[b].y-vertices[a].y,vertices[b].z-vertices[a].z};
+    double d1[3] = {vertices[b-1].x-vertices[a-1].x,vertices[b-1].y-vertices[a-1].y,vertices[b-1].z-vertices[a-1].z};
     // Vertex3 - Vertex1
-    double d2[3] = {vertices[c].x-vertices[a].x,vertices[c].y-vertices[a].y,vertices[c].z-vertices[a].z};
+    double d2[3] = {vertices[c-1].x-vertices[a-1].x,vertices[c-1].y-vertices[a-1].y,vertices[c-1].z-vertices[a-1].z};
     
     // Face Normal (unitary)
     mListN[i][0] = d1[1]*d2[2] - d1[2]*d2[1];
@@ -97,21 +98,21 @@ void Polygon::CreateGravFile(std::string filename, double density)
     // Edges
     int edgeAll[3][2] = {{a,b},{b,c},{c,a}};
     // Three edges per facet, and two vertices per edge
-    if (a>b){
-        edgeAll[0][0] = b;
-        edgeAll[0][1] = a;
+    // if (a>b){
+    //     edgeAll[0][0] = b;
+    //     edgeAll[0][1] = a;
         
-        }
-    if (b>c){
-        edgeAll[1][0] = c;
-        edgeAll[1][1] = b;
+    //     }
+    // if (b>c){
+    //     edgeAll[1][0] = c;
+    //     edgeAll[1][1] = b;
         
-        }
-    if (c>a){
-        edgeAll[2][0] = a;
-        edgeAll[2][1] = c;
+    //     }
+    // if (c<a){
+    //     edgeAll[2][0] = a;
+    //     edgeAll[2][1] = c;
         
-        } 
+    //     } 
     // Connectivity matrix
     for (int jj = 0; jj < 3; jj++) {
       for (int kk = 0; kk < 2; kk++) {
@@ -128,13 +129,16 @@ void Polygon::CreateGravFile(std::string filename, double density)
   bool repeated = 0; //set to false by default
   int numEdges = 0; // total number of non-repeated edges
   std::vector<int> index; // indices for non-repeated edges
-
   for (int nn = 0; nn < 3*mNOF; nn++) {
       repeated = 0;
-      for (int mm = nn; mm < 3*mNOF; mm++) {
+      for (int mm = 0; mm < nn; mm++) {
           if ((edgeIndexAll[mm][0] == edgeIndexAll[nn][0])&&(edgeIndexAll[mm][1] == edgeIndexAll[nn][1])&&(nn!=mm)){
               repeated = 1;
           }
+          else if((edgeIndexAll[mm][0] == edgeIndexAll[nn][1])&&(edgeIndexAll[mm][1] == edgeIndexAll[nn][0])&&(nn!=mm)){
+              repeated = 1;
+          }
+          
       }
       if (!repeated){
           index.push_back(nn);
@@ -213,28 +217,29 @@ void Polygon::CreateGravFile(std::string filename, double density)
               if (compt == 1){
                   edgeFacet[jj][0] = ii;
 
-                  edgeLineA[0] = vertices[indexVertex2].x - vertices[indexVertex1].x;
-                  edgeLineA[1] = vertices[indexVertex2].y - vertices[indexVertex1].y;
-                  edgeLineA[2] = vertices[indexVertex2].z - vertices[indexVertex1].z;
-                  if (edgeDirection == -1){
-                      edgeLineA[0] = - 1 * edgeLineA[0];
-                      edgeLineA[1] = - 1 * edgeLineA[1];
-                      edgeLineA[2] = - 1 * edgeLineA[2];
-                  }
+                  edgeLineA[0] = vertices[indexVertex2-1].x - vertices[indexVertex1-1].x;
+                  edgeLineA[1] = vertices[indexVertex2-1].y - vertices[indexVertex1-1].y;
+                  edgeLineA[2] = vertices[indexVertex2-1].z - vertices[indexVertex1-1].z;
+
+                  // if (edgeDirection == -1){
+                  //     edgeLineA[0] = - 1 * edgeLineA[0];
+                  //     edgeLineA[1] = - 1 * edgeLineA[1];
+                  //     edgeLineA[2] = - 1 * edgeLineA[2];
+                  // }
 
               } 
               else if (compt == 2){
                   edgeFacet[jj][1] = ii;
 
-                  edgeLineB[0] = vertices[indexVertex2].x - vertices[indexVertex1].x;
-                  edgeLineB[1] = vertices[indexVertex2].y - vertices[indexVertex1].y;
-                  edgeLineB[2] = vertices[indexVertex2].z - vertices[indexVertex1].z;
+                  edgeLineB[0] = vertices[indexVertex2-1].x - vertices[indexVertex1-1].x;
+                  edgeLineB[1] = vertices[indexVertex2-1].y - vertices[indexVertex1-1].y;
+                  edgeLineB[2] = vertices[indexVertex2-1].z - vertices[indexVertex1-1].z;
 
-                  if (edgeDirection == -1){
-                      edgeLineB[0] = - 1 * edgeLineB[0];
-                      edgeLineB[1] = - 1 * edgeLineB[1];
-                      edgeLineB[2] = - 1 * edgeLineB[2];
-                  }
+                  // if (edgeDirection == -1){
+                  //     edgeLineB[0] = - 1 * edgeLineB[0];
+                  //     edgeLineB[1] = - 1 * edgeLineB[1];
+                  //     edgeLineB[2] = - 1 * edgeLineB[2];
+                  // }
 
               }
           }
@@ -246,19 +251,19 @@ void Polygon::CreateGravFile(std::string filename, double density)
       for (int i = 0; i < 3; i++)
       {
         nhatA[i] = mListN[edgeFacet[jj][0]][i];
-        nhatB[i] = mListN[edgeFacet[jj][2]][i];
+        nhatB[i] = mListN[edgeFacet[jj][1]][i];
       }
 
-      nhatA12 = cross(nhatA,edgeLineA);
+      nhatA12 = cross(edgeLineA,nhatA);
       nhatA12 = nhatA12/norm(nhatA12);
-      nhatB21 = cross(nhatA,edgeLineB);
-      nhatB21 = nhatA12/norm(nhatB21);
+      nhatB21 = cross(nhatB,edgeLineB);
+      nhatB21 = nhatB21/norm(nhatB21);
       compt = 0;
       for (int nn = 0; nn < 3; nn++) {
           for (int mm = 0; mm < 3; mm++) {
-                mE[jj][compt] = nhatA[nn]*nhatA12[mm] + nhatB[nn]*nhatB21[mm];  
+                mE[jj][compt] = nhatA[nn]*nhatA12[mm] + nhatB[nn]*nhatB21[mm];
+                compt++;  
             } 
-            compt++;
       }
 
   }
@@ -285,7 +290,8 @@ void Polygon::CreateGravFile(std::string filename, double density)
 
   for(int i = 0; i < mNOV; i++)
     {
-      GravityFile << mX[i] << "\t"<< mY[i] << "\t"<< mZ[i]<< std::endl;   
+      GravityFile << mX[i] << "\t"<< mY[i] << "\t"<< mZ[i]<< std::endl;
+ 
     } 
 
   for(int i = 0; i < mNOF; i++)
@@ -293,14 +299,17 @@ void Polygon::CreateGravFile(std::string filename, double density)
       GravityFile<< mListTri[i][0] <<"\t"<< mListTri[i][1] <<"\t"<< mListTri[i][2]<< std::endl;
       GravityFile<< mListN[i][0] << "\t"<<mListN[i][1] <<"\t"<< mListN[i][2]<< std::endl;  
       GravityFile<< mF[i][0] <<"\t"<< mF[i][1] <<"\t"<< mF[i][2] <<"\t"<< mF[i][3] << "\t"<<mF[i][4] << "\t"<<mF[i][5] << "\t"<<mF[i][6] << "\t"<<mF[i][7] << "\t"<<mF[i][8]<< std::endl;  
+       
     }
 
   for(int i = 0; i < mNOE; i++)
     {
-
       GravityFile <<  mListE[i][0] << "\t"<< mListE[i][1]<< std::endl;
       GravityFile <<  mE[i][0] <<"\t"<<  mE[i][1] << "\t"<< mE[i][2] <<"\t"<<  mE[i][3] << "\t"<< mE[i][4] <<"\t"<<  mE[i][5] << "\t"<<mE[i][6] << "\t"<< mE[i][7] <<"\t"<<  mE[i][8]<< std::endl;
+      
+
     }
+
   GravityFile.close();
 
 }
@@ -358,8 +367,8 @@ void Polygon::ReadPolygon(std::string filename)
 int main()
 {  
 
-    std::string filename = "GravityMapping/Bennu50kfixed.obj";
-    double density = 1.26e12; //kg/km3
+    std::string filename = "GravityMapping/test.obj";
+    double density = 1.19e12; //kg/km3
 
     // Polygon polygon(filename, density);
     Polygon p;
