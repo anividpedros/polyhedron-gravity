@@ -367,8 +367,9 @@ void Polygon::ReadPolygon(std::string filename)
 int main()
 {  
 
-    std::string filename = "GravityMapping/test.obj";
-    double density = 1.19e12; //kg/km3
+    // std::string filename = "GravityMapping/Bennu50kfixed.obj";
+    std::string filename = "GravityMapping/Bennu50kfixed.obj";
+    double density = 1.26e12; //kg/km3
 
     // Polygon polygon(filename, density);
     Polygon p;

@@ -3,7 +3,7 @@
         {
             "type": "shell",
             "label": "make",
-            "command": "make CreateGravFile",
+            "command": "make PolyGrav",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
