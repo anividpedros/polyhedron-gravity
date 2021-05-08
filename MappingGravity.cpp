@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip> 
 
 #include <stdio.h>
 // For MPI
@@ -24,7 +25,7 @@ int main(int argc, char** argv)
 	// READ GRAVITY FILE
 	std::ifstream GravityFile("GravityFile.txt");
     Polygon polygon(GravityFile);
-	Vect grav_output(12); // Acceleration + gravity matrix
+	Vect grav_output(12); // Acceleration + gravity matrix + position
 
 
 	// READ FILE WITH MAPPING POINTS
@@ -74,7 +75,7 @@ int main(int argc, char** argv)
 		pos[1] = XscS[ii*3+1];
 		pos[2] = XscS[ii*3+2];
 		grav_output = PolyGrav(pos,polygon);
-		
+
 		// Acceleration
 		MapGravS[ii*12]   = grav_output[0];
 		MapGravS[ii*12+1] = grav_output[1];
@@ -91,6 +92,10 @@ int main(int argc, char** argv)
 		MapGravS[ii*12+10] = grav_output[10];
 		MapGravS[ii*12+11] = grav_output[11];
 
+		// //Position
+		// MapGravS[ii*15+12] = pos[0];
+		// MapGravS[ii*15+13] = pos[1];
+		// MapGravS[ii*15+14] = pos[2];
 	}
 	
 	MPI_Gather(MapGravS, 12*elperproc, MPI_DOUBLE, MapGrav, 12*elperproc, MPI_DOUBLE, 0, MPI_COMM_WORLD);
@@ -104,7 +109,7 @@ int main(int argc, char** argv)
 		assert(GravityFile.is_open());
 		for (size_t i = 0; i < nPoints; i++)
 		{
-			GravityFile<<MapGrav[i*12]<<'\t'<<MapGrav[i*12+1]<<'\t'<<MapGrav[i*12+2]<<'\n';	
+			GravityFile<<std::fixed<<std::setprecision(16)<<MapGrav[i*12]<<'\t'<<MapGrav[i*12+1]<<'\t'<<MapGrav[i*12+2]<<'\n';	
 		}
 		GravityFile.close();
 
@@ -118,8 +123,16 @@ int main(int argc, char** argv)
 			}
 		
 		}
-
 		GravityGradientFile.close();
+
+		// std::ofstream GravityPositionFile ("GravityMapping/GravityPosition.txt");
+		// assert(GravityPositionFile.is_open());
+		// for (size_t i = 0; i < nPoints; i++)
+		// {
+		// 	GravityPositionFile<<Xsc[i*3]<<'\t'<<Xsc[i*3+1]<<'\t'<<Xsc[i*3+2]<<'\n';	
+		// }
+		// GravityPositionFile.close();
+
 		delete Xsc;
 		delete MapGrav;
 	}

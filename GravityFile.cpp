@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <iomanip> 
 
 void Polygon::CreateGravFile(std::string filename, double density)
 {
@@ -188,12 +189,12 @@ void Polygon::CreateGravFile(std::string filename, double density)
               edgeDirection = -1;
               compt++;
           }
-          else if ((faces[ii].i== indexVertex1) && (faces[ii].k == indexVertex2))
+          else if ((faces[ii].k== indexVertex1) && (faces[ii].i == indexVertex2))
           {
               edgeAssig = 1;
               edgeDirection = 1;
               compt++;
-          }else if ((faces[ii].k== indexVertex1) && (faces[ii].i == indexVertex2))
+          }else if ((faces[ii].i== indexVertex1) && (faces[ii].k == indexVertex2))
           {
               //inverted -> -1
               edgeAssig = 1;
@@ -221,11 +222,11 @@ void Polygon::CreateGravFile(std::string filename, double density)
                   edgeLineA[1] = vertices[indexVertex2-1].y - vertices[indexVertex1-1].y;
                   edgeLineA[2] = vertices[indexVertex2-1].z - vertices[indexVertex1-1].z;
 
-                  // if (edgeDirection == -1){
-                  //     edgeLineA[0] = - 1 * edgeLineA[0];
-                  //     edgeLineA[1] = - 1 * edgeLineA[1];
-                  //     edgeLineA[2] = - 1 * edgeLineA[2];
-                  // }
+                  if (edgeDirection == -1){
+                      edgeLineA[0] = - 1 * edgeLineA[0];
+                      edgeLineA[1] = - 1 * edgeLineA[1];
+                      edgeLineA[2] = - 1 * edgeLineA[2];
+                  }
 
               } 
               else if (compt == 2){
@@ -235,11 +236,11 @@ void Polygon::CreateGravFile(std::string filename, double density)
                   edgeLineB[1] = vertices[indexVertex2-1].y - vertices[indexVertex1-1].y;
                   edgeLineB[2] = vertices[indexVertex2-1].z - vertices[indexVertex1-1].z;
 
-                  // if (edgeDirection == -1){
-                  //     edgeLineB[0] = - 1 * edgeLineB[0];
-                  //     edgeLineB[1] = - 1 * edgeLineB[1];
-                  //     edgeLineB[2] = - 1 * edgeLineB[2];
-                  // }
+                  if (edgeDirection == -1){
+                      edgeLineB[0] = - 1 * edgeLineB[0];
+                      edgeLineB[1] = - 1 * edgeLineB[1];
+                      edgeLineB[2] = - 1 * edgeLineB[2];
+                  }
 
               }
           }
@@ -256,7 +257,7 @@ void Polygon::CreateGravFile(std::string filename, double density)
 
       nhatA12 = cross(edgeLineA,nhatA);
       nhatA12 = nhatA12/norm(nhatA12);
-      nhatB21 = cross(nhatB,edgeLineB);
+      nhatB21 = cross(edgeLineB,nhatB);
       nhatB21 = nhatB21/norm(nhatB21);
       compt = 0;
       for (int nn = 0; nn < 3; nn++) {
@@ -290,7 +291,7 @@ void Polygon::CreateGravFile(std::string filename, double density)
 
   for(int i = 0; i < mNOV; i++)
     {
-      GravityFile << mX[i] << "\t"<< mY[i] << "\t"<< mZ[i]<< std::endl;
+      GravityFile << std::fixed << std::setprecision(12)<<mX[i] << "\t"<< mY[i] << "\t"<< mZ[i]<< std::endl;
  
     } 
 
@@ -311,6 +312,13 @@ void Polygon::CreateGravFile(std::string filename, double density)
     }
 
   GravityFile.close();
+
+  // std::ofstream Normal("NormalVectors.txt");
+  // for(int i = 0; i < mNOF; i++)
+  //   {
+  //     Normal<< mListN[i][0] << "\t"<<mListN[i][1] <<"\t"<< mListN[i][2]<< std::endl;         
+  //   }
+  // Normal.close();
 
 }
 

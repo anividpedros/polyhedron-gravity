@@ -371,6 +371,7 @@ Vect PolyGrav(Vect& Xsc, Polygon& Body)
   g_grav = Body.mGs*g_grav;
   a_grav = Body.mGs*a_grav;
 
+
   Vect Output(12);
   for (int i = 0; i < 3; i++)
   {
